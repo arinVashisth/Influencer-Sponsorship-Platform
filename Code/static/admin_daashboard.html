@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex@3"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            margin: 20px;
+        }
+        .chart-container div {
+            text-align: center;
+        }
+        .chart-container img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+        }
+        h3 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="bg-cyan-100">
+    <div id="app">
+        <admin-dashboard></admin-dashboard>
+    </div>
+
+    <script src="/static/js/admin.js">
+       
+    </script>
+</body>
+</html>

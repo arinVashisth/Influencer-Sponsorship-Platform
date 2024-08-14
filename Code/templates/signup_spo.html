@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-Up FOR Sponsor</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">IESCP</a>
+            <a class="btn btn-light ms-auto" href="/">Go Back</a>
+        </div>
+    </nav>
+
+    <div id="app">
+        <!-- Notification -->
+        <div v-if="showNotification" class="alert alert-info alert-dismissible fade show" role="alert">
+                Your signup will be approved by the admin and you will be mailed.  You can't Login without approval
+            <button type="button" class="btn-close" aria-label="Close" @click="showNotification = false"></button>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="card bg-light shadow-sm rounded-3 mx-auto" style="max-width: 600px;">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">Sign-Up As Sponsor</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{url_for('signup_Spon')}}" method="post">
+                    <div class="mb-3">
+                        <label for="comp_name" class="form-label">Company Name</label>
+                        <input type="text" class="form-control" id="comp_name" name="comp_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="industry" class="form-label">Industry</label>
+                        <input type="text" class="form-control" id="industry" name="industry" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="industry" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="budget" class="form-label">Your Budget</label>
+                        <input type="number" class="form-control" id="budget" name="budget" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showNotification: true,
+                notificationMessage: 'Your signup will be approved by the admin and you will be mailed.'
+            }
+        });
+    </script>
+</body>
+</html>

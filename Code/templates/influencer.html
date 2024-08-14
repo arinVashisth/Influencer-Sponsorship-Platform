@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Influencer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+        function toggleCommentsTable(postId) {
+            const app = document.getElementById('app').__vue__;
+            app.toggleCommentsTable(postId);
+        }
+    </script>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">IESCP</a>
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="/influsearch/{{ previnflu }}">Go Back</a>
+            </li>
+        </ul>
+        <a class="btn btn-outline-light ms-auto" href="/">Log Out</a>
+    </nav>
+    <div class="container mt-4">
+        <h1 class="display-4">{{ influ.name }}</h1>
+        <button class="btn btn-light me-2">Followers {{ fl | length }}</button>
+        <button class="btn btn-light me-2">Following {{ fo | length }}</button>
+        {% if l == 0 %}
+        <a class="btn btn-primary" href="/follow/{{ influ.id }}/{{ previnflu }}">Follow</a>
+        {% else %}
+        <a class="btn btn-primary" href="/unfollow/{{ influ.id }}/{{ previnflu }}">UnFollow</a>
+        {% endif %}
+        <p class="h4 mt-4">Posts:</p>
+        <div id="app" class="mt-4">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for post in posts %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        {% if post.media_type == 'Photo' %}
+                        <img src="/{{ post.media_url }}" alt="Post Media" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <video class="card-img-top" style="height: 200px; object-fit: cover;" controls>
+                            <source src="/{{ post.media_path }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        {% endif %}
+                        <div class="card-body">
+                            <p class="card-text">{{ post.description }}</p>
+                            <p class="card-text">
+                                Likes: {{ post.likes }}
+                                <a class="btn btn-light ms-2" href="/like/{{ post.id }}/{{ influ.id }}/{{ previnflu }}">
+                                    Like <i class="bi bi-hand-thumbs-up"></i>
+                                </a>
+                            </p>
+                            {% if post.comments %}
+                            <p class="card-text">Comments: {{ post.comments | length }}</p>
+                            {% else %}
+                            <p class="card-text">Comments: None</p>
+                            {% endif %}
+                            <button @click="toggleCommentsTable({{ post.id }})" class="btn btn-success mt-2">Show Comments</button>
+                            <div v-if="activePostId === {{ post.id }}" class="mt-4">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Influencer Name</th>
+                                            <th>Comment</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if post.comments %}
+                                        {% for comment in post.comments %}
+                                        <tr>
+                                            <td>{{ comment.influencer_name }}</td>
+                                            <td>{{ comment.comment }}</td>
+                                            <td>
+                                                {% if comment.influencer_name == previnfluInflu.name %}
+                                                <form action="{{ url_for('delete_comment', post_id=post.id, comment_id=loop.index0) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="3">No comments yet</td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <tr>
+                                            <td colspan="3">No comments yet</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                <form method="POST" action="{{ url_for('add_comment', post_id=post.id, previnflu=previnflu) }}">
+                                    <div class="mb-3">
+                                        <label for="comment" class="form-label">Add a Comment:</label>
+                                        <textarea id="comment" name="comment" rows="4" class="form-control" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                activePostId: null
+            },
+            methods: {
+                toggleCommentsTable(postId) {
+                    this.activePostId = this.activePostId === postId ? null : postId;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">IESCP</a>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/sponPro/{{spon.company_name}}">My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/campaigns/{{spon.company_name}}">My Campaigns</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/influencer/{{spon.company_name}}">Influencers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/sponstats/{{spon.company_name}}">Stats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/notify/{{spon.company_name}}">
+                        Notifications
+                    </a>
+                </li>
+            </ul>
+            <a class="btn btn-light" href="/">Log Out</a>
+        </div>
+    </nav>
+
+    <div id="app">
+        <p>New Notifications:-</p>
+        {% for camp in camps %}
+        
+        <div class="bg-danger text-white p-3 shadow rounded d-flex flex-wrap gap-2">
+            <button class="btn btn-light me-2">{{camp.name}}</button>
+            <button class="btn btn-light me-2">{{camp.description}}</button>
+            <button class="btn btn-light me-2">{{camp.goals}}</button>
+            <button class="btn btn-success me-2"><a href="/fixcamp/{{spon.company_name}}/{{camp.id}}">Fix This</a></button>
+            <button class="btn btn-light me-2">Flagged By Admin</button>
+
+            
+        </div>
+        {% endfor %}
+        <!-- Your main content here -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Campaign</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark px-4 py-3">
+        <a class="navbar-brand text-white" href="#">IESCP</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link text-light" href="/campaigns/{{sname}}">Go Back</a>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="container mt-4">
+        <h1 class="mb-4">Edit Campaign</h1>
+        <form action="/update_campaign/{{campaign.id}}/{{sname}}" method="POST" class="bg-white p-4 shadow rounded">
+            <div class="mb-3">
+                <label for="name" class="form-label">Campaign Name</label>
+                <input type="text" id="name" name="name" value="{{campaign.name}}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" rows="4" class="form-control" required>{{campaign.description}}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="start_date" class="form-label">Start Date</label>
+                <input type="date" id="start_date" name="start_date" value="{{campaign.start_date}}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="end_date" class="form-label">End Date</label>
+                <input type="date" id="end_date" name="end_date" value="{{campaign.end_date}}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="budget" class="form-label">Budget</label>
+                <input type="number" step="0.01" id="budget" name="budget" value="{{campaign.budget}}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="visibility" class="form-label">Visibility</label>
+                <select id="visibility" name="visibility" class="form-select">
+                    <option value="0" {% if campaign.visibility == 0 %}selected{% endif %}>Private</option>
+                    <option value="1" {% if campaign.visibility == 1 %}selected{% endif %}>Public</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="goals" class="form-label">Goals</label>
+                <textarea id="goals" name="goals" rows="4" class="form-control" required>{{campaign.goals}}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Campaign</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

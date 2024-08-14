@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Influencers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-cyan-100">
+    <nav class="bg-gray-800 px-4 py-4">
+        <ul class="flex space-x-4">
+            <li class="text-white font-bold text-2xl cursor-pointer">IESCP</li>
+            <li class="text-gray-400 hover:text-white cursor-pointer"><a href="/sponPro/{{spon.company_name}}">My Profile</a></li>
+            <li class="text-gray-400 hover:text-white cursor-pointer"><a href="/campaigns/{{spon.company_name}}">My Campaigns</a></li>
+            <li class="text-white hover:text-white cursor-pointer"><a href="/influencer/{{spon.company_name}}">Influencers</a></li>
+            <li class="text-gray-400 hover:text-white cursor-pointer"><a href="/sponstats/{{spon.company_name}}">Stats</a></li>
+            <li class="text-gray-400 hover:text-white cursor-pointer">Notifications</li>
+            <button class="rounded-lg px-2 bg-white hover:text-white font-bold hover:font-bold hover:bg-black active:bg-gray-800 ring-5 ring-black outline-none focus:outline-none focus:ring focus:ring-white"><a href="/">Log Out</a></button>
+        </ul>
+    </nav>
+
+    <div class="ml-4 mt-8 space-y-3">
+        <p class="text-4xl mb-2 font-sans">Influencers:-</p>
+        {% for fl in flue %}
+            <div class="bg-rose-200 px-4 py-2 shadow-2xl mr-[600px] rounded-xl">
+                <button class="rounded-lg px-4 py-2 bg-emerald-500 hover:text-emerald-500 font-bold hover:font-bold hover:bg-white active:bg-gray-800 ring-5 ring-black outline-none focus:outline-none focus:ring focus:ring-white">{{fl.name}}</button>
+                <button class="rounded-lg px-4 py-2 mr-2 bg-red-500 hover:text-red-500 font-bold hover:font-bold hover:bg-white active:bg-gray-800 ring-5 ring-black outline-none focus:outline-none focus:ring focus:ring-white ml-2">{{fl.reach}}</button>
+                <button class="rounded-lg px-4 py-2 mr-2 bg-emerald-500 hover:text-emerald-500 font-bold hover:font-bold hover:bg-white active:bg-gray-800 ring-5 ring-black outline-none focus:outline-none focus:ring focus:ring-white">{{fl.niche}}</button>
+                {% set ad_request_found = false %}
+                {% for sublist in list1 %}
+                    {% if sublist %}
+                        {% for ad_request in sublist %}
+                            {% if ad_request.influencer_id == fl.id %}
+                                {% set ad_request_found = true %}
+                                <button class="rounded-lg px-4 py-2 mr-1 bg-red-500 hover:text-red-500 font-bold hover:font-bold hover:bg-white active:bg-gray-800 ring-5 ring-black outline-none focus:outline-none focus:ring focus:ring-white ml-2"><a href="/ad_request/{{ad_request.id}}/1">Continue Conversation</a></button>
+                                <button class="rounded-lg px-4 py-2 mr-1 bg-yellow-500 hover:text-yellow-500 font-bold hover:font-bold hover:bg-white active:bg-gray-800 ring-5 ring-black outline-none focus:outline-none focus:ring focus:ring-white ml-2"><a href="/edit_ad_request/{{ad_request.id}}/{{spon.company_name}}">Edit</a></button>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                {% if not ad_request_found %}
+                    <button class="rounded-lg px-4 py-2 mr-1 bg-red-500 hover:text-red-500 font-bold hover:font-bold hover:bg-white active:bg-gray-800 ring-5 ring-black outline-none focus:outline-none focus:ring focus:ring-white ml-2"><a href="/addreq/{{fl.id}}/{{spon.company_name}}">Ad Request</a></button>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>

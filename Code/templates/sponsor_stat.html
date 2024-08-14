@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Stats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">IESCP</a>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/sponPro/{{spon.company_name}}">My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/campaigns/{{spon.company_name}}">My Campaigns</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/influencer/{{spon.company_name}}">Influencers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/sponstats/{{spon.company_name}}">Stats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/notify/{{spon.company_name}}">Notifications</a>
+                </li>
+            </ul>
+            <a class="btn btn-light" href="/">Log Out</a>
+        </div>
+    </nav>
+    <div id="app" class="container mt-5">
+        <h2 class="display-4 mb-4">Sponsor Stats</h2>
+        <div class="mb-4">
+            <button class="btn btn-primary" @click="downloadCSV">Download CSV</button>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Campaigns</h5>
+                        <p class="card-text">{{ total_campaigns }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Budget</h5>
+                        <p class="card-text">${{ total_budget }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Spent</h5>
+                        <p class="card-text">${{ total_spent }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Average Campaign Budget</h5>
+                        <p class="card-text">${{ average_campaign_budget }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Influencers Engaged</h5>
+                        <p class="card-text">{{ total_influencers_engaged }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            methods: {
+                async downloadCSV() {
+                    try {
+                        // Start the CSV generation task
+                        const res = await fetch('/download-csv');
+                        if (!res.ok) {
+                            throw new Error('Failed to start CSV generation.');
+                        }
+                        const data = await res.json();
+                        
+                        if (data["task-id"]) {
+                            const taskId = data["task-id"];
+    
+                            // Polling for the CSV generation completion
+                            const intv = setInterval(async () => {
+                                try {
+                                    const csv_res = await fetch(`/get-csv/${taskId}`);
+                                    if (csv_res.ok) {
+                                        clearInterval(intv);
+                                        // Redirect to download the CSV file
+                                        window.location.href = `/get-csv/${taskId}`;
+                                    }
+                                } catch (error) {
+                                    console.error('Polling error:', error);
+                                }
+                            }, 1000);
+                        } else {
+                            console.error('No task ID returned.');
+                        }
+                    } catch (error) {
+                        console.error('Download error:', error);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

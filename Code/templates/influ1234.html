@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Influencers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+    <nav class="bg-dark text-white p-4">
+        <ul class="nav">
+            <li class="nav-item">
+                <span class="navbar-brand h1">IESCP</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="/sponPro/{{spon.company_name}}">My Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="/campaigns/{{spon.company_name}}">My Campaigns</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/influencer/{{spon.company_name}}">Influencers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="/sponstats/{{spon.company_name}}">Stats</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="/notify/{{spon.company_name}}">
+                    Notifications
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-light" href="/">Log Out</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="m-4">
+        <p class="display-4 mb-2">Influencers:</p>
+        
+        <!-- Search Form -->
+        <form method="get" action="/influencer/{{spon.company_name}}" class="mb-4">
+            <input type="text" name="search" class="form-control rounded-xl d-inline-block me-2" placeholder="Search Influencers...">
+            <button type="submit" class="btn btn-dark">Search</button>
+        </form>
+
+        {% if flue %}
+            {% for fl in flue %}
+                <div class="bg-danger text-white p-3 shadow rounded mb-3">
+                    <button class="btn btn-success me-2">{{fl.name}}</button>
+                    <button class="btn btn-danger me-2">{{fl.reach}}</button>
+                    <button class="btn btn-success me-2">{{fl.niche}}</button>
+                    {% set ad_request_found = false %}
+                    {% for sublist in list1 %}
+                        {% if sublist %}
+                            {% for ad_request in sublist %}
+                                {% if ad_request.influencer_id == fl.id %}
+                                    {% set ad_request_found = true %}
+                                    <a class="btn btn-danger me-2" href="/ad_request/{{ad_request.id}}/1">Continue Conversation</a>
+                                    <a class="btn btn-warning me-2" href="/edit_ad_request/{{ad_request.id}}/{{spon.company_name}}">Edit</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if not ad_request_found %}
+                        <a class="btn btn-danger me-2" href="/addreq/{{fl.id}}/{{spon.company_name}}">Ad Request</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <h2 class="display-4 text-dark mb-4">Sorry, no influencers match your search criteria.</h2>
+        {% endif %}
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
